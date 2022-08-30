@@ -1,0 +1,42 @@
+{
+  "serverPort": 11111,
+  "discordApi": "You key",
+  "moralis": {
+    "apiKey": "Your key",
+    "logLevel": "info",
+    "formatEvmChainId": "decimal",
+    "formatEvmAddress": "checksum"
+  },
+  "CheckingTokenAddresses": [
+    {
+      "tokenAddress": "Token Contract Address",
+      "roles": [
+        {
+          "roleId": "",
+          "requiredAmount": 1
+        },
+        {
+          "roleId": "",
+          "requiredAmount": 5
+        }
+      ]
+    },
+    {
+      "tokenAddress": "Token Contract Address",
+      "roles": [
+        {
+          "roleId": "",
+          "requiredAmount": 5
+        },
+        {
+          "roleId": "",
+          "requiredAmount": 8
+        },
+        {
+          "roleId": "",
+          "requiredAmount": 10
+        }
+      ]
+    }
+  ]
+}
