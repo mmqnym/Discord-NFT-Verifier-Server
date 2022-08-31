@@ -1,4 +1,5 @@
 {
+  "clientURL": "You url",
   "serverPort": 11111,
   "discordApi": "You key",
   "moralis": {
