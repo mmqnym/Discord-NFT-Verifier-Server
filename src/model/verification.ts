@@ -34,7 +34,9 @@ const callVerifiedAPI = async (
     });
 
     const userHoldingAmount = verifiedResponse.raw.total;
-    console.log(`userHoldingNumber: ${userHoldingAmount}`); // for debug
+    console.log(
+      `TokenAddress: ${tokenAddress} HoldingAmount: ${userHoldingAmount}`
+    );
 
     result.total = userHoldingAmount;
     result.roles = obj.roles;
@@ -56,9 +58,6 @@ const recordRoles = (record: v.VerifiedResult) => {
   let recordedRoles: Array<v.Role> = [];
 
   record.roles.forEach((roleData: v.Role) => {
-    // for debug
-    console.log(`record.total: ${record.total}`);
-    console.log(`roleData.requiredAmount: ${roleData.requiredAmount}`);
     if (record.total >= roleData.requiredAmount) {
       recordedRoles.push(roleData);
     }
@@ -87,6 +86,7 @@ export const process = async (
       promises.push(callVerifiedAPI(walletAddress, waitingCheckAddressInfo[i]));
     }
 
+    console.log(`Account: ${walletAddress}\n=====`);
     verifiedResults = await Promise.all(promises);
 
     for (let i = 0; i < verifiedResults.length; i++) {
@@ -96,6 +96,7 @@ export const process = async (
     console.log(error);
     recordedRoles.length = 0;
   } finally {
+    console.log("=====");
     return recordedRoles;
   }
 };

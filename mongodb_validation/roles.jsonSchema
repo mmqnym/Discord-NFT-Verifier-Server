@@ -1,0 +1,41 @@
+{
+  $jsonSchema: {
+    required: [
+      'tokenAddress',
+      'roles'
+    ],
+    properties: {
+      tokenAddress: {
+        description: 'most be a contract address in string type',
+        bsonType: 'string'
+      },
+      roles: {
+        description: 'save roles attributes',
+        bsonType: 'array',
+        items: {
+          bsonType: 'object',
+          required: [
+            'roleName',
+            'roleId',
+            'requiredAmount'
+          ],
+          description: 'define a role attributes',
+          properties: {
+            roleName: {
+              description: 'it is only used to display to the user, so it does not have to be correct. If you want to set the discord role by name, you must set its value to the latest',
+              bsonType: 'string'
+            },
+            roleId: {
+              description: 'it is used to set discord role, must be correct',
+              bsonType: 'string'
+            },
+            requiredAmount: {
+              description: 'The minimum amount of NFT holding required to get this role',
+              bsonType: 'int'
+            }
+          }
+        }
+      }
+    }
+  }
+}

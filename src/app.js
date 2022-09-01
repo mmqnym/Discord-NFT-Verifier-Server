@@ -14,6 +14,7 @@ const setCorsHeader = (response) => {
     response.header("Access-Control-Allow-Origin", clientURL);
     response.header("Access-Control-Allow-Headers", "Content-Type");
     response.header("Access-Control-Allow-Methods", "POST");
+    response.header("Access-Control-Max-Age", "300");
     return response;
 };
 app.options("/api/verify", (request, response) => {
@@ -24,7 +25,7 @@ app.post("/api/verify", (request, response) => {
     response = setCorsHeader(response);
     // Got a request from client.
     try {
-        console.log(`Request from client IP Address: ${request.ip}`);
+        console.log(`>>> Request from client IP Address: ${request.ip}`);
         (async () => {
             const recordedRoles = await (0, verification_1.process)(request.body.walletAddress);
             if (recordedRoles.length > 0) {
@@ -38,7 +39,6 @@ app.post("/api/verify", (request, response) => {
                     message: "The user don't have the NFT(s) we set!",
                     roles: [],
                 });
-                console.log("hello");
             }
         })();
     }
@@ -51,5 +51,5 @@ app.post("/api/verify", (request, response) => {
     }
 });
 app.listen(port, () => {
-    console.log(`server is running on http://localhost:${port}`);
+    console.log(`server is running on port: ${port}`);
 });

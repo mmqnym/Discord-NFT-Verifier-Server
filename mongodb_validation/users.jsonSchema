@@ -1,0 +1,26 @@
+{
+  $jsonSchema: {
+    required: [
+      'discordId',
+      'walletAddress',
+      'roleIds'
+    ],
+    properties: {
+      discordId: {
+        description: 'discord user id in string type',
+        bsonType: 'string'
+      },
+      walletAddress: {
+        description: 'the user\'s wallet address(account)',
+        bsonType: 'string'
+      },
+      roleIds: {
+        description: 'save the role ids user obtained',
+        bsonType: 'array',
+        items: {
+          bsonType: 'string'
+        }
+      }
+    }
+  }
+}
