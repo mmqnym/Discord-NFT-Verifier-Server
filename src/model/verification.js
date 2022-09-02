@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.process = void 0;
+exports.rolesToIdsString = exports.verify = void 0;
 const moralis_1 = __importDefault(require("moralis"));
 const evm_utils_1 = require("@moralisweb3/evm-utils");
 const configs_json_1 = __importDefault(require("../configs.json"));
@@ -66,7 +66,7 @@ const recordRoles = (record) => {
  * unless you are using the paid API.
  * @returns {Promise<Array<Role>>} The objects of the roles that the user will be assigned.
  */
-const process = async (walletAddress) => {
+const verify = async (walletAddress) => {
     let promises = [];
     const waitingCheckAddressInfo = configs_json_1.default.CheckingTokenAddresses;
     let verifiedResults = [];
@@ -90,4 +90,17 @@ const process = async (walletAddress) => {
         return recordedRoles;
     }
 };
-exports.process = process;
+exports.verify = verify;
+/**
+ * Convert the Role objects to discord id strings
+ * @param roles Array of Roles
+ * @returns Role ids
+ */
+const rolesToIdsString = (roles) => {
+    let roleIds = [];
+    roles.forEach((roleInfo) => {
+        roleIds.push(roleInfo.roleId);
+    });
+    return roleIds;
+};
+exports.rolesToIdsString = rolesToIdsString;

@@ -1,6 +1,7 @@
 {
   "clientURL": "You url",
   "serverPort": 11111,
+  "mongoDBUri": "Your URI",
   "discordApi": "You key",
   "moralis": {
     "apiKey": "Your key",
