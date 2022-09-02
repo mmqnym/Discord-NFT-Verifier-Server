@@ -73,9 +73,7 @@ const recordRoles = (record: v.VerifiedResult) => {
  * unless you are using the paid API.
  * @returns {Promise<Array<Role>>} The objects of the roles that the user will be assigned.
  */
-export const process = async (
-  walletAddress: string
-): Promise<Array<v.Role>> => {
+export const verify = async (walletAddress: string): Promise<Array<v.Role>> => {
   let promises: Array<Promise<v.VerifiedResult>> = [];
   const waitingCheckAddressInfo = configs.CheckingTokenAddresses;
   let verifiedResults: Array<v.VerifiedResult> = [];
@@ -99,4 +97,19 @@ export const process = async (
     console.log("=====");
     return recordedRoles;
   }
+};
+
+/**
+ * Convert the Role objects to discord id strings
+ * @param roles Array of Roles
+ * @returns Role ids
+ */
+export const rolesToIdsString = (roles: Array<v.Role>) => {
+  let roleIds: Array<String> = [];
+
+  roles.forEach((roleInfo) => {
+    roleIds.push(roleInfo.roleId);
+  });
+
+  return roleIds;
 };
