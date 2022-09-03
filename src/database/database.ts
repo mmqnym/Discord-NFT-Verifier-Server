@@ -9,7 +9,8 @@ export const Database = {
     try {
       await mongoose.connect(configs.mongoDBUri);
       console.log("Database is connected.");
-    } catch (_) {
+    } catch (error) {
+      console.error(error);
       throw "Can not connect database.";
     }
   },
@@ -17,11 +18,12 @@ export const Database = {
     try {
       await mongoose.disconnect();
       console.log("Database is disconnected.");
-    } catch (_) {
+    } catch (error) {
+      console.error(error);
       throw "Can not disconnect database.";
     }
   },
-  fetchRoleInfos: async (): Promise<v.VerifyInfo[]> => {
+  fetchRoleInfos: async (): Promise<Verifying.VerifyInfo[]> => {
     try {
       const result = await roleModel.find({});
       return result;
@@ -30,10 +32,10 @@ export const Database = {
     }
   },
   createUser: async (
-    newDiscordId: String,
-    newWalletAddress: String,
-    newRoleIds: Array<String>
-  ): Promise<Boolean> => {
+    newDiscordId: string,
+    newWalletAddress: string,
+    newRoleIds: Array<string>
+  ): Promise<boolean> => {
     try {
       // if exists update it, else create one record
       await userModel.replaceOne(
@@ -53,5 +55,14 @@ export const Database = {
     }
 
     return true;
+  },
+  fetchUsers: async (): Promise<Array<Verified.User> | undefined> => {
+    try {
+      const result = await userModel.find({});
+      return result;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
   },
 };

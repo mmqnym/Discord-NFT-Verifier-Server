@@ -14,7 +14,8 @@ exports.Database = {
             await mongoose_1.default.connect(configs_json_1.default.mongoDBUri);
             console.log("Database is connected.");
         }
-        catch (_) {
+        catch (error) {
+            console.error(error);
             throw "Can not connect database.";
         }
     },
@@ -23,7 +24,8 @@ exports.Database = {
             await mongoose_1.default.disconnect();
             console.log("Database is disconnected.");
         }
-        catch (_) {
+        catch (error) {
+            console.error(error);
             throw "Can not disconnect database.";
         }
     },
@@ -52,5 +54,15 @@ exports.Database = {
             return false;
         }
         return true;
+    },
+    fetchUsers: async () => {
+        try {
+            const result = await user_1.userModel.find({});
+            return result;
+        }
+        catch (error) {
+            console.log(error);
+            return undefined;
+        }
     },
 };

@@ -2,24 +2,26 @@ import express, { Express, Request, Response } from "express";
 import configs from "./configs.json";
 import { verify, rolesToIdsString } from "./model/verification";
 import { Database } from "./database/database";
+import { client, assignRoles } from "./model/bot";
 
-// When the developer types a command, it can be reloaded.
-let roleInfos: Array<v.VerifyInfo> = [];
+// It reloads in every period.
+let roleInfos: Array<Verifying.VerifyInfo> = [];
 
+/**
+ * Set up the database and login to the discord client.
+ */
 (async () => {
   await Database.connect();
   roleInfos = await Database.fetchRoleInfos();
+  await client.login(configs.discordToken);
 })();
-
-const port = configs.serverPort;
-const clientURL = configs.clientURL;
 
 const app: Express = express();
 
 app.use(express.json());
 
 const setCorsHeader = (response: Response): Response => {
-  response.header("Access-Control-Allow-Origin", clientURL);
+  response.header("Access-Control-Allow-Origin", configs.clientURL);
   response.header("Access-Control-Allow-Headers", "Content-Type");
   response.header("Access-Control-Allow-Methods", "POST");
   response.header("Access-Control-Max-Age", "300");
@@ -39,20 +41,39 @@ app.post("/api/verify", (request: Request, response: Response) => {
     console.log(`>>> Request from client IP Address: ${request.ip}`);
 
     (async () => {
-      const recordedRoles = await verify(request.body.walletAddress);
-      const willAssignRoleIds = rolesToIdsString(recordedRoles);
+      const recordedRoles = await verify(request.body.walletAddress, roleInfos);
+      const willAssignRoleIds: Array<string> = rolesToIdsString(recordedRoles);
+      const userDiscordId: string = request.body.userId;
+      const userWalletAddress: string = request.body.walletAddress;
+      let successOnInsertDB = false;
+      let successOnAssignRoles = false;
 
       if (recordedRoles.length > 0) {
-        await Database.createUser(
-          request.body.userID,
-          request.body.walletAddress,
+        successOnInsertDB = await Database.createUser(
+          userDiscordId,
+          userWalletAddress,
           willAssignRoleIds
         );
 
-        response.status(201).json({
-          message: "The user will get the below role(s) soon.",
-          roles: recordedRoles,
-        });
+        if (successOnInsertDB) {
+          successOnAssignRoles = await assignRoles(
+            userWalletAddress,
+            userDiscordId,
+            willAssignRoleIds
+          );
+        }
+
+        if (successOnInsertDB && successOnAssignRoles) {
+          response.status(201).json({
+            message: "The user will get the below role(s) soon.",
+            roles: recordedRoles,
+          });
+        } else {
+          response.status(400).json({
+            message: "Failed to give role(s) or the user is not on our server.",
+            roles: [],
+          });
+        }
       } else {
         response.status(200).json({
           message: "The user don't have the NFT(s) we set!",
@@ -60,22 +81,27 @@ app.post("/api/verify", (request: Request, response: Response) => {
         });
       }
     })();
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
+    let errMsg = "When doing verification some errors occured.";
+
+    if (error instanceof Error) {
+      errMsg = error.message;
+    }
     response.status(500).json({
-      message: error.message,
+      message: errMsg,
       roles: [],
     });
   }
 });
 
-let server = app.listen(port, () => {
-  console.log(`server is running on port: ${port}`);
+const server = app.listen(configs.serverPort, () => {
+  console.log(`server is running on port: ${configs.serverPort}`);
 });
 
-process.on("SIGINT", () => {
-  server.close(async () => {
-    await Database.disconnect();
-    console.log("\nServer closed.");
-  });
+process.once("SIGINT", async () => {
+  await Database.disconnect();
+  client.destroy();
+  server.close();
+  console.log("Server is closed.");
 });
