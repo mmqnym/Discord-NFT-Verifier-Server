@@ -36,7 +36,10 @@ const assignRoles = async (walletAddress, userId, roleIds) => {
             iconURL: "https://kaijuofcronos.com/img/FINAL_KAIJU_TALISMAN_small.png",
             url: "https://kaijuofcronos.com/",
         })
-            .addFields({ name: "Name", value: member.toString() }, { name: "Account", value: walletAddress }, { name: "Roles", value: `${roleTags}` })
+            .addFields({ name: "Name", value: member.toString() }, {
+            name: "Account",
+            value: `[${walletAddress}](https://cronoscan.com/address/${walletAddress})`,
+        }, { name: "Roles", value: `${roleTags}` })
             .setTimestamp()
             .setFooter({
             text: "Kaiju Verifier",

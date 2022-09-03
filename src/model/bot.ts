@@ -50,7 +50,10 @@ export const assignRoles = async (
       })
       .addFields(
         { name: "Name", value: member.toString() },
-        { name: "Account", value: walletAddress },
+        {
+          name: "Account",
+          value: `[${walletAddress}](https://cronoscan.com/address/${walletAddress})`,
+        },
         { name: "Roles", value: `${roleTags}` }
       )
       .setTimestamp()
