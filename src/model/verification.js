@@ -66,9 +66,8 @@ const recordRoles = (record) => {
  * unless you are using the paid API.
  * @returns {Promise<Array<Role>>} The objects of the roles that the user will be assigned.
  */
-const verify = async (walletAddress) => {
+const verify = async (walletAddress, waitingCheckAddressInfo) => {
     let promises = [];
-    const waitingCheckAddressInfo = configs_json_1.default.CheckingTokenAddresses;
     let verifiedResults = [];
     let recordedRoles = [];
     try {

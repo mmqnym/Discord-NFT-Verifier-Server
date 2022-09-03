@@ -9,15 +9,15 @@ import configs from "../configs.json";
  */
 const callVerifiedAPI = async (
   walletAddress: string,
-  obj: v.VerifyInfo
-): Promise<v.VerifiedResult> => {
+  obj: Verifying.VerifyInfo
+): Promise<Verifying.VerifiedResult> => {
   const chain = EvmChain.CRONOS;
   const address: string = walletAddress;
   const format: "decimal" = "decimal";
   const limit: number = 1;
   const tokenAddress: string = obj.tokenAddress;
 
-  let result: v.VerifiedResult = {
+  let result: Verifying.VerifiedResult = {
     total: 0,
     roles: [],
   };
@@ -54,10 +54,10 @@ const callVerifiedAPI = async (
  * @param record The user's NFT and the corresponding available roles.
  * @returns The names of the roles recorded.
  */
-const recordRoles = (record: v.VerifiedResult) => {
-  let recordedRoles: Array<v.Role> = [];
+const recordRoles = (record: Verifying.VerifiedResult) => {
+  let recordedRoles: Array<Verifying.Role> = [];
 
-  record.roles.forEach((roleData: v.Role) => {
+  record.roles.forEach((roleData: Verifying.Role) => {
     if (record.total >= roleData.requiredAmount) {
       recordedRoles.push(roleData);
     }
@@ -73,11 +73,13 @@ const recordRoles = (record: v.VerifiedResult) => {
  * unless you are using the paid API.
  * @returns {Promise<Array<Role>>} The objects of the roles that the user will be assigned.
  */
-export const verify = async (walletAddress: string): Promise<Array<v.Role>> => {
-  let promises: Array<Promise<v.VerifiedResult>> = [];
-  const waitingCheckAddressInfo = configs.CheckingTokenAddresses;
-  let verifiedResults: Array<v.VerifiedResult> = [];
-  let recordedRoles: Array<v.Role> = [];
+export const verify = async (
+  walletAddress: string,
+  waitingCheckAddressInfo: Array<Verifying.VerifyInfo>
+): Promise<Array<Verifying.Role>> => {
+  let promises: Array<Promise<Verifying.VerifiedResult>> = [];
+  let verifiedResults: Array<Verifying.VerifiedResult> = [];
+  let recordedRoles: Array<Verifying.Role> = [];
 
   try {
     for (let i = 0; i < waitingCheckAddressInfo.length; i++) {
@@ -104,8 +106,8 @@ export const verify = async (walletAddress: string): Promise<Array<v.Role>> => {
  * @param roles Array of Roles
  * @returns Role ids
  */
-export const rolesToIdsString = (roles: Array<v.Role>) => {
-  let roleIds: Array<String> = [];
+export const rolesToIdsString = (roles: Array<Verifying.Role>) => {
+  let roleIds: Array<string> = [];
 
   roles.forEach((roleInfo) => {
     roleIds.push(roleInfo.roleId);
