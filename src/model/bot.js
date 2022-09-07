@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateRoles = exports.firstAssignRoles = exports.client = void 0;
 const discord_js_1 = require("discord.js");
+const rest_1 = require("@discordjs/rest");
 const configs_json_1 = __importDefault(require("../configs.json"));
 exports.client = new discord_js_1.Client({
     intents: [
@@ -14,10 +15,12 @@ exports.client = new discord_js_1.Client({
         discord_js_1.GatewayIntentBits.GuildMembers,
     ],
 });
-exports.client.once("ready", () => {
-    console.log(`logged in as ${exports.client.user?.tag}`);
-    exports.client.user?.setActivity("Kaiju of Cronos", { type: discord_js_1.ActivityType.Watching });
-});
+const commands = [
+    {
+        name: "reload",
+        description: "Reload the role settings.",
+    },
+];
 /**
  * When the user verifies through the front-end, give the roles.
  *
@@ -125,3 +128,32 @@ const updateRoles = async (userId, walletAddress, oldRoleIds, newRoleIds) => {
     }
 };
 exports.updateRoles = updateRoles;
+exports.client.on("interactionCreate", async (interaction) => {
+    if (!interaction.isChatInputCommand()) {
+        return;
+    }
+    if (interaction.commandName === "reload") {
+        /* reload db
+        ...
+        */
+        await interaction.reply({
+            content: "The role settings have been reloaded.",
+        });
+    }
+});
+exports.client.once("ready", () => {
+    console.log(`logged in as ${exports.client.user?.tag}`);
+    exports.client.user?.setActivity("Kaiju of Cronos", { type: discord_js_1.ActivityType.Watching });
+    const CLIENT_ID = exports.client.user.id;
+    const rest = new rest_1.REST({ version: "10" }).setToken(configs_json_1.default.discord.token);
+    (async () => {
+        try {
+            await rest.put(discord_js_1.Routes.applicationCommands(CLIENT_ID), {
+                body: commands,
+            });
+        }
+        catch (error) {
+            console.error(error);
+        }
+    })();
+});

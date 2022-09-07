@@ -4,7 +4,9 @@ import {
   GatewayIntentBits,
   TextChannel,
   EmbedBuilder,
+  Routes,
 } from "discord.js";
+import { REST } from "@discordjs/rest";
 import configs from "../configs.json";
 
 export const client = new Client({
@@ -16,10 +18,12 @@ export const client = new Client({
   ],
 });
 
-client.once("ready", () => {
-  console.log(`logged in as ${client.user?.tag}`);
-  client.user?.setActivity("Kaiju of Cronos", { type: ActivityType.Watching });
-});
+const commands = [
+  {
+    name: "reload",
+    description: "Reload the role settings.",
+  },
+];
 
 /**
  * When the user verifies through the front-end, give the roles.
@@ -158,3 +162,36 @@ export const updateRoles = async (
     return false;
   }
 };
+
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isChatInputCommand()) {
+    return;
+  }
+
+  if (interaction.commandName === "reload") {
+    /* reload db
+    ...
+    */
+    await interaction.reply({
+      content: "The role settings have been reloaded.",
+    });
+  }
+});
+
+client.once("ready", () => {
+  console.log(`logged in as ${client.user?.tag}`);
+  client.user?.setActivity("Kaiju of Cronos", { type: ActivityType.Watching });
+
+  const CLIENT_ID = client.user!.id;
+  const rest = new REST({ version: "10" }).setToken(configs.discord.token);
+
+  (async () => {
+    try {
+      await rest.put(Routes.applicationCommands(CLIENT_ID), {
+        body: commands,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  })();
+});

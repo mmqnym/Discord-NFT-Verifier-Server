@@ -114,6 +114,7 @@ app.post("/api/verify", (request: Request, response: Response) => {
  * check the wallets of verified users every time period,
  * update the database, and then assign roles to the users.
  */
+/*
 const checkingUsersTimer = setInterval(async () => {
   try {
     const oldUserData = await Database.fetchUsers();
@@ -162,13 +163,13 @@ const checkingUsersTimer = setInterval(async () => {
     console.error(error);
   }
 }, configs.discord.checkUserCycleTime);
-
+*/
 const server = app.listen(configs.serverPort, () => {
   console.log(`server is running on port: ${configs.serverPort}`);
 });
 
 process.once("SIGINT", async () => {
-  clearInterval(checkingUsersTimer);
+  //clearInterval(checkingUsersTimer);
   await Database.disconnect();
   client.destroy();
   console.log("Log out of discord client.");
