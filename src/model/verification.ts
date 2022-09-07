@@ -4,12 +4,13 @@ import configs from "../configs.json";
 
 /**
  * Call Moralis API to get the user's an NFT collection holding amount.
+ *
  * @param obj An verify info records token contract address and roles information.
  * @returns {Promise<VerifiedResult>} The user's NFT holding amount.
  */
 const callVerifiedAPI = async (
   walletAddress: string,
-  obj: Verifying.VerifyInfo
+  obj: Verifying.RoleSettings
 ): Promise<Verifying.VerifiedResult> => {
   const chain = EvmChain.CRONOS;
   const address: string = walletAddress;
@@ -41,7 +42,7 @@ const callVerifiedAPI = async (
     result.total = userHoldingAmount;
     result.roles = obj.roles;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     result.total = -1;
     result.roles.length = 0;
   } finally {
@@ -51,8 +52,9 @@ const callVerifiedAPI = async (
 
 /**
  * Record the roles available to the user.
+ *
  * @param record The user's NFT and the corresponding available roles.
- * @returns The names of the roles recorded.
+ * @returns The roles recorded.
  */
 const recordRoles = (record: Verifying.VerifiedResult) => {
   let recordedRoles: Array<Verifying.Role> = [];
@@ -68,14 +70,15 @@ const recordRoles = (record: Verifying.VerifiedResult) => {
 
 /**
  * Execute the verify operation.
- * Note that if you add more than 25 contract addresses in configs.json,
+ * Note that if you add more than 25 contract addresses in your database,
  * you must split the promises into multiple groups before calling the Moralis API,
  * unless you are using the paid API.
+ *
  * @returns {Promise<Array<Role>>} The objects of the roles that the user will be assigned.
  */
 export const verify = async (
   walletAddress: string,
-  waitingCheckAddressInfo: Array<Verifying.VerifyInfo>
+  waitingCheckAddressInfo: Array<Verifying.RoleSettings>
 ): Promise<Array<Verifying.Role>> => {
   let promises: Array<Promise<Verifying.VerifiedResult>> = [];
   let verifiedResults: Array<Verifying.VerifiedResult> = [];
@@ -93,7 +96,7 @@ export const verify = async (
       recordedRoles = recordedRoles.concat(recordRoles(verifiedResults[i]));
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     recordedRoles.length = 0;
   } finally {
     console.log("=====");
@@ -102,9 +105,9 @@ export const verify = async (
 };
 
 /**
- * Convert the Role objects to discord id strings
- * @param roles Array of Roles
- * @returns Role ids
+ * Convert the Role objects to discord id strings.
+ * @param roles Array of Roles.
+ * @returns Role ids in string.
  */
 export const rolesToIdsString = (roles: Array<Verifying.Role>) => {
   let roleIds: Array<string> = [];

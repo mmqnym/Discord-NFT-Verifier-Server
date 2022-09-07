@@ -21,28 +21,35 @@ client.once("ready", () => {
   client.user?.setActivity("Kaiju of Cronos", { type: ActivityType.Watching });
 });
 
-export const assignRoles = async (
-  walletAddress: string,
+/**
+ * When the user verifies through the front-end, give the roles.
+ *
+ * @param userId The user's discord id.
+ * @param walletAddress The user's account.
+ * @param roleIds The role ids user will be assigned.
+ */
+export const firstAssignRoles = async (
   userId: string,
+  walletAddress: string,
   roleIds: Array<string>
 ): Promise<boolean> => {
   try {
-    const guild = await client.guilds.fetch(configs.discordGuildId);
-    const member = await guild?.members.fetch(userId);
-    let roleTags: Array<string> = [];
+    let roleAddTags: Array<string> = [];
+    let guild = await client.guilds.fetch(configs.discord.guildId);
+    let member = await guild?.members.fetch(userId);
 
     for (let i = 0; i < roleIds.length; i++) {
       await member?.roles.add(roleIds[i]);
-      roleTags.push(`<@&${roleIds[i]}>`);
+      roleAddTags.push(`<@&${roleIds[i]}>`);
     }
 
     const channel = (await client.channels.fetch(
-      configs.discordLogChannelId
+      configs.discord.logChannelId
     )) as TextChannel;
 
     const embed = new EmbedBuilder()
-      .setColor(0x6552a3)
-      .setTitle("Member Updated")
+      .setColor(0x4a86d4)
+      .setTitle("Member Verified")
       .setAuthor({
         name: "Kaiju Verifier",
         iconURL: "https://kaijuofcronos.com/img/FINAL_KAIJU_TALISMAN_small.png",
@@ -54,7 +61,7 @@ export const assignRoles = async (
           name: "Account",
           value: `[${walletAddress}](https://cronoscan.com/address/${walletAddress})`,
         },
-        { name: "Roles", value: `${roleTags}` }
+        { name: "(+) Add Roles", value: `${roleAddTags}` }
       )
       .setTimestamp()
       .setFooter({
@@ -63,8 +70,91 @@ export const assignRoles = async (
 
     await channel?.send({ embeds: [embed] });
     return true;
-  } catch {
-    console.log("Failed to give role(s) or the user is not on our server.");
+  } catch (error) {
+    console.error("Failed to give role(s) or the user is not on our server.");
+    console.error(error);
+    return false;
+  }
+};
+
+/**
+ * Update the roles of a verified user.
+ *
+ * @param userId The user's discord id.
+ * @param walletAddress The user's account.
+ * @param oldRoleIds The user's old role ids.
+ * @param newRoleIds The user's new role ids.
+ * @returns Success
+ */
+export const updateRoles = async (
+  userId: string,
+  walletAddress: string,
+  oldRoleIds: Array<string>,
+  newRoleIds: Array<string>
+): Promise<boolean> => {
+  try {
+    let roleAddTags: Array<string> = [];
+    let roleRmTags: Array<string> = [];
+    let guild = await client.guilds.fetch(configs.discord.guildId);
+    let member = await guild?.members.fetch(userId);
+
+    // Remove roles that the user is no longer valid to obtain.
+    for (let i = 0; i < oldRoleIds.length; i++) {
+      if (!newRoleIds.includes(oldRoleIds[i])) {
+        await member?.roles.remove(oldRoleIds[i]);
+        roleRmTags.push(`<@&${oldRoleIds[i]}>`);
+      }
+    }
+
+    // Add new role to the user.
+    for (let i = 0; i < newRoleIds.length; i++) {
+      if (!oldRoleIds.includes(newRoleIds[i])) {
+        await member?.roles.add(newRoleIds[i]);
+        roleAddTags.push(`<@&${newRoleIds[i]}>`);
+      }
+    }
+
+    if (roleRmTags.length || roleAddTags.length) {
+      const channel = (await client.channels.fetch(
+        configs.discord.logChannelId
+      )) as TextChannel;
+
+      const embed = new EmbedBuilder()
+        .setColor(0x6552a3)
+        .setTitle("Member Updated")
+        .setAuthor({
+          name: "Kaiju Verifier",
+          iconURL:
+            "https://kaijuofcronos.com/img/FINAL_KAIJU_TALISMAN_small.png",
+          url: "https://kaijuofcronos.com/",
+        })
+        .addFields(
+          { name: "Name", value: member.toString() },
+          {
+            name: "Account",
+            value: `[${walletAddress}](https://cronoscan.com/address/${walletAddress})`,
+          }
+        )
+        .setTimestamp()
+        .setFooter({
+          text: "Kaiju Verifier",
+        });
+
+      if (roleAddTags.length) {
+        embed.addFields({ name: "(+) Add Roles", value: `${roleAddTags}` });
+      }
+
+      if (roleRmTags.length) {
+        embed.addFields({ name: "(-) Remove Roles", value: `${roleRmTags}` });
+      }
+
+      await channel?.send({ embeds: [embed] });
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Failed to give role(s) or the user is not on our server.");
+    console.error(error);
     return false;
   }
 };

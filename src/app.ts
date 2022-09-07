@@ -2,18 +2,26 @@ import express, { Express, Request, Response } from "express";
 import configs from "./configs.json";
 import { verify, rolesToIdsString } from "./model/verification";
 import { Database } from "./database/database";
-import { client, assignRoles } from "./model/bot";
+import { client, firstAssignRoles, updateRoles } from "./model/bot";
 
-// It reloads in every period.
-let roleInfos: Array<Verifying.VerifyInfo> = [];
+// Reload when the developer enters a command.
+let roleSettings: Array<Verifying.RoleSettings> = [];
+
+// It updates every once in a while
+let verifiedUser: Array<Verified.User> = [];
 
 /**
  * Set up the database and login to the discord client.
  */
 (async () => {
   await Database.connect();
-  roleInfos = await Database.fetchRoleInfos();
-  await client.login(configs.discordToken);
+  roleSettings = await Database.fetchRoleSettings();
+  verifiedUser = await Database.fetchUsers();
+
+  if (roleSettings.length === 0 || verifiedUser.length === 0) {
+    throw "Server internal error when fetching resources from the database";
+  }
+  await client.login(configs.discord.token);
 })();
 
 const app: Express = express();
@@ -41,14 +49,20 @@ app.post("/api/verify", (request: Request, response: Response) => {
     console.log(`>>> Request from client IP Address: ${request.ip}`);
 
     (async () => {
-      const recordedRoles = await verify(request.body.walletAddress, roleInfos);
-      const willAssignRoleIds: Array<string> = rolesToIdsString(recordedRoles);
+      const recordedRoles = await verify(
+        request.body.walletAddress,
+        roleSettings
+      );
+
       const userDiscordId: string = request.body.userId;
       const userWalletAddress: string = request.body.walletAddress;
       let successOnInsertDB = false;
       let successOnAssignRoles = false;
 
       if (recordedRoles.length > 0) {
+        const willAssignRoleIds: Array<string> =
+          rolesToIdsString(recordedRoles);
+        // Create or update user data in the database.
         successOnInsertDB = await Database.createUser(
           userDiscordId,
           userWalletAddress,
@@ -56,9 +70,9 @@ app.post("/api/verify", (request: Request, response: Response) => {
         );
 
         if (successOnInsertDB) {
-          successOnAssignRoles = await assignRoles(
-            userWalletAddress,
+          successOnAssignRoles = await firstAssignRoles(
             userDiscordId,
+            userWalletAddress,
             willAssignRoleIds
           );
         }
@@ -69,8 +83,8 @@ app.post("/api/verify", (request: Request, response: Response) => {
             roles: recordedRoles,
           });
         } else {
-          response.status(400).json({
-            message: "Failed to give role(s) or the user is not on our server.",
+          response.status(500).json({
+            message: "When creating user data, some errors occured.",
             roles: [],
           });
         }
@@ -82,7 +96,7 @@ app.post("/api/verify", (request: Request, response: Response) => {
       }
     })();
   } catch (error) {
-    console.log(error);
+    console.error(error);
     let errMsg = "When doing verification some errors occured.";
 
     if (error instanceof Error) {
@@ -95,13 +109,69 @@ app.post("/api/verify", (request: Request, response: Response) => {
   }
 });
 
+/**
+ * According to the configs.discord.checkUserCycleTime,
+ * check the wallets of verified users every time period,
+ * update the database, and then assign roles to the users.
+ */
+const checkingUsersTimer = setInterval(async () => {
+  try {
+    const oldUserData = await Database.fetchUsers();
+
+    for (let i = 0; i < oldUserData.length; i++) {
+      let successOnInsertDB = false;
+      let successOnUpdateRoles = false;
+
+      let newRecordedRoles = await verify(
+        oldUserData[i].walletAddress,
+        roleSettings
+      );
+
+      let willAssignRoleIds: Array<string> = rolesToIdsString(newRecordedRoles);
+
+      // Update db.
+      successOnInsertDB = await Database.createUser(
+        oldUserData[i].discordId,
+        oldUserData[i].walletAddress,
+        willAssignRoleIds
+      );
+
+      // Assign discord roles.
+      if (successOnInsertDB) {
+        // Wait 1 secs, cuz using free API
+        await (async () => {
+          return new Promise((resolve) => setTimeout(resolve, 1000));
+        })();
+
+        successOnUpdateRoles = await updateRoles(
+          oldUserData[i].discordId,
+          oldUserData[i].walletAddress,
+          oldUserData[i].roleIds,
+          willAssignRoleIds
+        );
+      }
+
+      if (!successOnInsertDB || !successOnUpdateRoles) {
+        console.log(
+          `When updating <@${oldUserData[i].discordId}>, error(s) occured.`
+        );
+      }
+    }
+  } catch (error) {
+    console.error("Error(s) occured on checkingUsersTimer!");
+    console.error(error);
+  }
+}, configs.discord.checkUserCycleTime);
+
 const server = app.listen(configs.serverPort, () => {
   console.log(`server is running on port: ${configs.serverPort}`);
 });
 
 process.once("SIGINT", async () => {
+  clearInterval(checkingUsersTimer);
   await Database.disconnect();
   client.destroy();
+  console.log("Log out of discord client.");
   server.close();
   console.log("Server is closed.");
 });

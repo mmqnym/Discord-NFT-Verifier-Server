@@ -9,6 +9,7 @@ const evm_utils_1 = require("@moralisweb3/evm-utils");
 const configs_json_1 = __importDefault(require("../configs.json"));
 /**
  * Call Moralis API to get the user's an NFT collection holding amount.
+ *
  * @param obj An verify info records token contract address and roles information.
  * @returns {Promise<VerifiedResult>} The user's NFT holding amount.
  */
@@ -37,7 +38,7 @@ const callVerifiedAPI = async (walletAddress, obj) => {
         result.roles = obj.roles;
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         result.total = -1;
         result.roles.length = 0;
     }
@@ -47,8 +48,9 @@ const callVerifiedAPI = async (walletAddress, obj) => {
 };
 /**
  * Record the roles available to the user.
+ *
  * @param record The user's NFT and the corresponding available roles.
- * @returns The names of the roles recorded.
+ * @returns The roles recorded.
  */
 const recordRoles = (record) => {
     let recordedRoles = [];
@@ -61,9 +63,10 @@ const recordRoles = (record) => {
 };
 /**
  * Execute the verify operation.
- * Note that if you add more than 25 contract addresses in configs.json,
+ * Note that if you add more than 25 contract addresses in your database,
  * you must split the promises into multiple groups before calling the Moralis API,
  * unless you are using the paid API.
+ *
  * @returns {Promise<Array<Role>>} The objects of the roles that the user will be assigned.
  */
 const verify = async (walletAddress, waitingCheckAddressInfo) => {
@@ -81,7 +84,7 @@ const verify = async (walletAddress, waitingCheckAddressInfo) => {
         }
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         recordedRoles.length = 0;
     }
     finally {
@@ -91,9 +94,9 @@ const verify = async (walletAddress, waitingCheckAddressInfo) => {
 };
 exports.verify = verify;
 /**
- * Convert the Role objects to discord id strings
- * @param roles Array of Roles
- * @returns Role ids
+ * Convert the Role objects to discord id strings.
+ * @param roles Array of Roles.
+ * @returns Role ids in string.
  */
 const rolesToIdsString = (roles) => {
     let roleIds = [];

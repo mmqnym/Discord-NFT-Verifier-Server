@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 /**
  * @property discordId: Discord user id.
- * @property walletAddress: the user's wallet address(account).
- * @property roleIds: Save the role ids user obtained.
+ * @property walletAddress: The user's wallet address(account).
+ * @property roleIds: Save the discord role ids user obtained.
  */
 const userSchema = new mongoose.Schema({
   discordId: {
