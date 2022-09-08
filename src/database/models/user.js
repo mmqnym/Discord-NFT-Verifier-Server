@@ -7,8 +7,8 @@ exports.userModel = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 /**
  * @property discordId: Discord user id.
- * @property walletAddress: the user's wallet address(account).
- * @property roleIds: Save the role ids user obtained.
+ * @property walletAddress: The user's wallet address(account).
+ * @property roleIds: Save the discord role ids user obtained.
  */
 const userSchema = new mongoose_1.default.Schema({
     discordId: {
