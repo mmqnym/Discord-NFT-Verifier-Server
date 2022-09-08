@@ -11,7 +11,7 @@ import configs from "../configs.json";
 
 export const client = new Client({
   intents: [
-    GatewayIntentBits.Guilds,
+    GatewayIntentBits.Guilds, // rm
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMembers,
@@ -63,7 +63,9 @@ export const firstAssignRoles = async (
         { name: "Name", value: member.toString() },
         {
           name: "Account",
-          value: `[${walletAddress}](https://cronoscan.com/address/${walletAddress})`,
+          value: `[${walletAddress.slice(0, 4)}...${walletAddress.slice(
+            -4
+          )}](https://cronoscan.com/address/${walletAddress})`,
         },
         { name: "(+) Add Roles", value: `${roleAddTags}` }
       )
@@ -133,10 +135,13 @@ export const updateRoles = async (
           url: "https://kaijuofcronos.com/",
         })
         .addFields(
-          { name: "Name", value: member.toString() },
+          { name: "Name", value: member.toString(), inline: true },
           {
             name: "Account",
-            value: `[${walletAddress}](https://cronoscan.com/address/${walletAddress})`,
+            value: `[${walletAddress.slice(0, 4)}...${walletAddress.slice(
+              -4
+            )}](https://cronoscan.com/address/${walletAddress})`,
+            inline: true,
           }
         )
         .setTimestamp()
@@ -190,6 +195,8 @@ client.once("ready", () => {
       await rest.put(Routes.applicationCommands(CLIENT_ID), {
         body: commands,
       });
+
+      console.log("Successfully registering commands");
     } catch (error) {
       console.error(error);
     }

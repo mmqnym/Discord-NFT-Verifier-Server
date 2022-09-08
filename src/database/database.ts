@@ -60,6 +60,8 @@ export const Database = {
     newRoleIds: Array<string>
   ): Promise<boolean> => {
     try {
+      if (!newDiscordId) return false;
+
       await userModel.replaceOne(
         { discordId: newDiscordId },
         {

@@ -60,6 +60,8 @@ exports.Database = {
      */
     createUser: async (newDiscordId, newWalletAddress, newRoleIds) => {
         try {
+            if (!newDiscordId)
+                return false;
             await user_1.userModel.replaceOne({ discordId: newDiscordId }, {
                 discordId: newDiscordId,
                 walletAddress: newWalletAddress,

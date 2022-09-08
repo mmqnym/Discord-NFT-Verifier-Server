@@ -48,7 +48,7 @@ const firstAssignRoles = async (userId, walletAddress, roleIds) => {
         })
             .addFields({ name: "Name", value: member.toString() }, {
             name: "Account",
-            value: `[${walletAddress}](https://cronoscan.com/address/${walletAddress})`,
+            value: `[${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}](https://cronoscan.com/address/${walletAddress})`,
         }, { name: "(+) Add Roles", value: `${roleAddTags}` })
             .setTimestamp()
             .setFooter({
@@ -103,9 +103,10 @@ const updateRoles = async (userId, walletAddress, oldRoleIds, newRoleIds) => {
                 iconURL: "https://kaijuofcronos.com/img/FINAL_KAIJU_TALISMAN_small.png",
                 url: "https://kaijuofcronos.com/",
             })
-                .addFields({ name: "Name", value: member.toString() }, {
+                .addFields({ name: "Name", value: member.toString(), inline: true }, {
                 name: "Account",
-                value: `[${walletAddress}](https://cronoscan.com/address/${walletAddress})`,
+                value: `[${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}](https://cronoscan.com/address/${walletAddress})`,
+                inline: true,
             })
                 .setTimestamp()
                 .setFooter({
@@ -151,6 +152,7 @@ exports.client.once("ready", () => {
             await rest.put(discord_js_1.Routes.applicationCommands(CLIENT_ID), {
                 body: commands,
             });
+            console.log("Successfully registering commands");
         }
         catch (error) {
             console.error(error);
