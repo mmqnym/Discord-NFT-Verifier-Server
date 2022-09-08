@@ -1,44 +1,18 @@
 {
-  "clientURL": "You url",
+  "clientURL": "",
   "serverPort": 11111,
-  "mongoDBUri": "Your URI",
-  "discordApi": "You key",
+  "mongoDBUri": "mongodb+srv://<UserName>:<Password>@cluster0.badrclk.mongodb.net/<DatabaseName>",
+  "discord": {
+    "ownerId": "",
+    "token": "",
+    "guildId": "",
+    "logChannelId": "",
+    "checkUserCycleTime": 1200000
+  },
   "moralis": {
-    "apiKey": "Your key",
+    "apiKey": "",
     "logLevel": "info",
     "formatEvmChainId": "decimal",
     "formatEvmAddress": "checksum"
-  },
-  "CheckingTokenAddresses": [
-    {
-      "tokenAddress": "Token Contract Address",
-      "roles": [
-        {
-          "roleId": "",
-          "requiredAmount": 1
-        },
-        {
-          "roleId": "",
-          "requiredAmount": 5
-        }
-      ]
-    },
-    {
-      "tokenAddress": "Token Contract Address",
-      "roles": [
-        {
-          "roleId": "",
-          "requiredAmount": 5
-        },
-        {
-          "roleId": "",
-          "requiredAmount": 8
-        },
-        {
-          "roleId": "",
-          "requiredAmount": 10
-        }
-      ]
-    }
-  ]
+  }
 }
