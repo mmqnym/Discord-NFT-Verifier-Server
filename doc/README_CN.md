@@ -20,7 +20,7 @@
 
 - 使用者透過 discord 驗證連結跳轉至本服務前端驗證頁面，當連結錢包後，即會送出資訊至後端等待驗證結果。收到結果之後顯示驗證結果給使用者。
 
-![model](./doc/img/client.png)
+![model](./img/client.png)
 
 <br />
 
@@ -35,7 +35,7 @@
 
 **併發 - 為了追求速度使用併發呼叫，免費 api 有一秒請求 25 筆的限制，因此若您使用免費 api，請控制合約數量在 25 以內，否則須自行修改 code，以分組形式分批驗證。**
 
-![model](./doc/img/server.png)
+![model](./img/server.png)
 
 <br />
 
@@ -45,21 +45,21 @@
 
 #### 添加 Discord 驗證 API 跳轉頁(您的驗證系統首頁)
 
-![Add redirects](./doc/img/discord-1.png)
+![Add redirects](./img/discord-1.png)
 
 #### 選擇上面添加的驗證頁 URL 來生成驗證 URL 提供用戶做驗證使用
 
-![Generate identy url](./doc/img/discord-2.png)
+![Generate identy url](./img/discord-2.png)
 
 記得必須將產生出來的 url 中的`code`字串替換成`token`
 
 #### 打開特權意圖網關
 
-![Open privileged gateway intents](./doc/img/discord-3.png)
+![Open privileged gateway intents](./img/discord-3.png)
 
 #### 勾選類型及權限產生機器人邀請連結
 
-![Select the bot scopes and permissions](./doc/img/discord-4.png)
+![Select the bot scopes and permissions](./img/discord-4.png)
 
 <br />
 
