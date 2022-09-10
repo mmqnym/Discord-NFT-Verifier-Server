@@ -7,7 +7,7 @@
     "start": "nodemon --exec node ./src/app.js"
   },
   "author": "0xmimiQ <web3@0xmimiq.me>",
-  "license": "UNLICENSED",
+  "license": "Apache License 2.0",
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/node": "^18.7.13",

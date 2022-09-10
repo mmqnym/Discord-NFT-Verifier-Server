@@ -2,6 +2,13 @@
 
 <a href="https://github.com/0xmimiQ/Discord-NFT-Verifier-Server/blob/main/README.md"><img src="https://img.shields.io/badge/Language-English-9cf?style=for-the-badge" /></a> &nbsp;<a href="https://github.com/0xmimiQ/Discord-NFT-Verifier-Server/blob/main/doc/README_CN.md"><img src="https://img.shields.io/badge/Language-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87-9cf?style=for-the-badge" /></a> &nbsp;<a href="https://github.com/0xmimiQ/Discord-NFT-Verifier-Server/blob/main/doc/README_JP.md"><img src="https://img.shields.io/badge/Language-%E6%97%A5%E6%9C%AC%E8%AA%9E-9cf?style=for-the-badge" /></a>
 
+> 源碼
+
+- [**Client**](https://github.com/0xmimiQ/Discord-NFT-Verifier-Client)
+- [**Server**](https://github.com/0xmimiQ/Discord-NFT-Verifier-Server)
+
+<br />
+
 > 概述
 
 此機器人提供 NFT 驗證功能，當使用者透過前端驗證後，將會取得由開發者設定的對應身分組。並且將會每一段時間自動檢驗一次。相關設定開發者可透過本地或雲端資料庫操作，本機器人使用 MongoDB - Atlas。
