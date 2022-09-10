@@ -1,6 +1,6 @@
 # Discord NFT Verifier - Server
 
-<a href="https://github.com/0xmimiQ/Discord-NFT-Verifier-Server/blob/main/README.md"><img src="https://img.shields.io/badge/Language-English-9cf?style=for-the-badge" /></a> <a href="https://github.com/0xmimiQ/Discord-NFT-Verifier-Server/blob/main/doc/README_CN.md"><img src="https://img.shields.io/badge/Language-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87-9cf?style=for-the-badge" /></a> <a href="https://github.com/0xmimiQ/Discord-NFT-Verifier-Server/blob/main/doc/README_JP.md"><img src="https://img.shields.io/badge/Language-%E6%97%A5%E6%9C%AC%E8%AA%9E-9cf?style=for-the-badge" /></a>
+<a href="https://github.com/0xmimiQ/Discord-NFT-Verifier-Server/blob/main/README.md"><img src="https://img.shields.io/badge/Language-English-9cf?style=for-the-badge" /></a> &nbsp;<a href="https://github.com/0xmimiQ/Discord-NFT-Verifier-Server/blob/main/doc/README_CN.md"><img src="https://img.shields.io/badge/Language-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87-9cf?style=for-the-badge" /></a> &nbsp;<a href="https://github.com/0xmimiQ/Discord-NFT-Verifier-Server/blob/main/doc/README_JP.md"><img src="https://img.shields.io/badge/Language-%E6%97%A5%E6%9C%AC%E8%AA%9E-9cf?style=for-the-badge" /></a>
 
 > 概述
 
@@ -10,7 +10,7 @@
 
 <br />
 
-## Strcture & Technology
+## Architecture & Technology
 
 > 產品架構及相關技術
 
@@ -30,7 +30,7 @@
 
 - 收到來自前端的用戶資訊(discord 相關以及錢包地址)之後，\*併發呼叫 Moralis API，確認用戶的錢包中是否包含開發者所設定的代幣合約，根據前述來決定是否給予用戶身分組。
 - 每一段週期重新檢驗一次已驗證的用戶錢包，來決定是否要新增或拔除用戶身分組。
-- 開發者可以透過修改資料庫設定，來變動 role settings。※如果 server 在運行中，必須透過指令載入新設定。
+- 開發者可以透過修改資料庫設定，來變動 role settings。
 - 提供 Discord Slash Command(/reload)來隨時加載新的 role settings。
 
 **併發 - 為了追求速度使用併發呼叫，免費 api 有一秒請求 25 筆的限制，因此若您使用免費 api，請控制合約數量在 25 以內，否則須自行修改 code，以分組形式分批驗證。**
@@ -43,7 +43,7 @@
 
 > 1. 設定 Discord 機器人相關設定。(※您必須給予本機器人能給予的身分組權限還要高的身分組，否則將無法運作。)
 
-###- 添加 Discord 驗證 API 跳轉頁(您的驗證系統首頁)
+### - 添加 Discord 驗證 API 跳轉頁(您的驗證系統首頁)
 
 ![Add redirects](./img/discord-1.png)
 
@@ -53,11 +53,11 @@
 
 記得必須將產生出來的 url 中的`code`字串替換成`token`
 
-### - 打開特權意圖網關
+### - 打開特權網關意圖
 
 ![Open privileged gateway intents](./img/discord-3.png)
 
-### - 勾選類型及權限產生機器人邀請連結
+### - 勾選類型及權限產生機器人邀請連結，之後將機器人邀請至您的 Guild
 
 ![Select the bot scopes and permissions](./img/discord-4.png)
 
@@ -105,11 +105,11 @@
 }
 ```
 
-添加後記得必須在 discord 輸入`/reload`來載入新設定，或是 server 重開。
+**添加後記得必須在 discord 輸入`/reload`來載入新設定，或是 server 重開。**
 
 <br />
 
-> 3. 建立客戶端與伺服器端的資料夾，之後分別在各自的資料夾執行 git clone，將倉庫的檔案複製下來，然後執行 npm 指令。最後透過靜態伺服器部署成生產環境。您也可以基於測試目的直接執行 npm start。
+> 3. 建立客戶端與伺服器端的資料夾，之後分別在各自的資料夾執行 git clone，將倉庫的檔案複製下來，然後執行 npm 指令。最後透過反向代理伺服器部署成生產環境。您也可以基於測試目的直接執行 npm start。
 
 <br />
 
@@ -175,7 +175,7 @@ npm install
 
 利用像是[Nginx](https://www.nginx.com/)等反向代理伺服器，做相關參數設定即可運行。
 
-參考如何部屬您的檔案至 Nginx 上:
+參考如何部屬您的檔案至 Nginx 上：
 
 - https://www.youtube.com/watch?v=6CjbezdbB8o
 - https://help.clouding.io/hc/en-us/articles/4407785919762-How-to-Deploy-a-React-js-App-with-Nginx-on-Ubuntu-20-04
@@ -209,7 +209,7 @@ npm install
 
 ## License
 
-所有包含:
+所有包含：
 
 - Kaiju of Cronos
 - クロノスの怪獣
