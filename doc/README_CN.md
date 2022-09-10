@@ -14,7 +14,7 @@
 
 > 產品架構及相關技術
 
-### Client
+### - Client
 
 > Using: React + Tailwindcss
 
@@ -24,7 +24,7 @@
 
 <br />
 
-### Server
+### - Server
 
 > Using: Express + MongoDB Atlas + DiscordJS
 
@@ -43,21 +43,21 @@
 
 > 1. 設定 Discord 機器人相關設定。(※您必須給予本機器人能給予的身分組權限還要高的身分組，否則將無法運作。)
 
-#### 添加 Discord 驗證 API 跳轉頁(您的驗證系統首頁)
+###- 添加 Discord 驗證 API 跳轉頁(您的驗證系統首頁)
 
 ![Add redirects](./img/discord-1.png)
 
-#### 選擇上面添加的驗證頁 URL 來生成驗證 URL 提供用戶做驗證使用
+### - 選擇上面添加的驗證頁 URL 來生成驗證 URL 提供用戶做驗證使用
 
 ![Generate identy url](./img/discord-2.png)
 
 記得必須將產生出來的 url 中的`code`字串替換成`token`
 
-#### 打開特權意圖網關
+### - 打開特權意圖網關
 
 ![Open privileged gateway intents](./img/discord-3.png)
 
-#### 勾選類型及權限產生機器人邀請連結
+### - 勾選類型及權限產生機器人邀請連結
 
 ![Select the bot scopes and permissions](./img/discord-4.png)
 
@@ -65,7 +65,7 @@
 
 > 2. 設置資料庫，這邊利用的是 MongoDB - Atlas。
 
-#### 配置 role
+### - 配置 role
 
 在您想要用來連線的 database 下，建立`role`這個名稱的 collection，以下面這種形式 insert 一筆 document：
 
@@ -113,7 +113,7 @@
 
 <br />
 
-#### Client 資料夾
+### - Client 資料夾
 
 ```sh
 mkdir <projectfolderForClient> && cd <projectfolderForClient>
@@ -137,7 +137,7 @@ const verifyApiUrl = "verify.0xmimiq.me";
 npm run build
 ```
 
-#### Server 資料夾
+### - Server 資料夾
 
 ```sh
 mkdir <projectfolderForServer> && cd <projectfolderForServer>
@@ -171,7 +171,7 @@ npm install
 }
 ```
 
-#### 設置反向代理伺服器
+### - 設置反向代理伺服器
 
 利用像是[Nginx](https://www.nginx.com/)等反向代理伺服器，做相關參數設定即可運行。
 
@@ -187,18 +187,18 @@ npm install
 > 驗證頁及 Discord 中的更新展示
 
 - [**Static verify page**](https://0xmimiq.github.io/Discord-NFT-Verifier-Client/)
-- ![Discord demo](./doc/img/discordDemo.png)
+- ![Discord demo](./img/discordDemo.png)
 
 <br />
 
 ## Reference
 
-### Client
+### - Client
 
 - [**React**](https://reactjs.org/)
 - [**Tailwindcss**](https://tailwindcss.com/docs/installation)
 
-### Server
+### - Server
 
 - [**ExpressJS**](https://github.com/expressjs/express)
 - [**DiscordJS**](https://discord.js.org/#/docs/discord.js/main/general/welcome)
