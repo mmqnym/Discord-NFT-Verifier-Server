@@ -187,7 +187,7 @@ npm install
 > 驗證頁及 Discord 中的更新展示
 
 - [**Static verify page**](https://0xmimiq.github.io/Discord-NFT-Verifier-Client/)
-- ![Discord demo](./img/discordDemo.png)
+- [Discord demo](./img/discordDemo.png)
 
 <br />
 
