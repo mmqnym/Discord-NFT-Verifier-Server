@@ -40,7 +40,7 @@
 - 開發者可以透過修改資料庫設定，來變動 role settings。
 - 提供 Discord Slash Command(/reload)來隨時加載新的 role settings。
 
-**併發 - 為了追求速度使用併發呼叫，免費 api 有一秒請求 25 筆的限制，因此若您使用免費 api，請控制合約數量在 25 以內，否則須自行修改 code，以分組形式分批驗證。**
+**併發 - 為了追求速度使用併發呼叫，免費 API 有一秒請求 25 筆的限制，因此若您使用免費 API，請控制合約數量在 25 以內，否則須自行修改 code，以分組形式分批驗證。**
 
 ![model](./img/server.png)
 
@@ -116,7 +116,7 @@
 
 <br />
 
-> 3. 建立客戶端與伺服器端的資料夾，之後分別在各自的資料夾執行 git clone，將倉庫的檔案複製下來，然後執行 npm 指令。最後透過反向代理伺服器部署成生產環境。您也可以基於測試目的直接執行 npm start。
+> 3. 建立客戶端與伺服器端的資料夾，之後分別在各自的資料夾執行 `git clone`，將倉庫的檔案複製下來，然後執行 npm 指令。最後透過反向代理伺服器部署成生產環境。您也可以基於測試目的直接執行 `npm start`。
 
 <br />
 
@@ -130,7 +130,7 @@ npm install
 
 <br />
 
-將./src/App.js 中的`verifyApiUrl`更改為您的後端 Api Url。
+將`./src/App.js`中的`verifyApiUrl`更改為您的後端 API Url。
 
 ```javascript
 const verifyApiUrl = "verify.0xmimiq.me";
@@ -169,7 +169,7 @@ npm install
     "checkUserCycleTime": 1200000 // Check wallet cycle interval time in ms
   },
   "moralis": {
-    // Apply api key in https://moralis.io/
+    // Apply API key in https://moralis.io/
     "apiKey": "",
     "logLevel": "info",
     "formatEvmChainId": "decimal",
@@ -194,7 +194,7 @@ npm install
 > 驗證頁及 Discord 中的更新展示
 
 - [**Static verify page**](https://0xmimiq.github.io/Discord-NFT-Verifier-Client/)
-- [Discord demo](./img/discordDemo.png)
+- [**Discord demo**](./img/discordDemo.png)
 
 <br />
 
@@ -223,4 +223,4 @@ npm install
 
 等文字或相關圖像之一切藝術資產，包括但不限於`Logo`, `Banner`, `Background`皆為`Kaiju of Cronos`所有，保留所有權，禁止未經授權以原樣或再製使用。
 
-其餘非上述所限制藝術資產，採用 [Apache-2.0 License](LICENSE)。
+其餘非上述所限制之藝術或程式碼資產，採用 [Apache-2.0 License](LICENSE)。

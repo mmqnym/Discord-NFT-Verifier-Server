@@ -40,7 +40,7 @@
 - 開発者は、データベースの設定を変更することで、role settings を変更することができます。
 - 新しい role settings をいつでもロードできるように、Discord Slash Command(/reload)が提供されています。
 
-**並行呼び出し - 速度を上げるために並行呼び出しを使用します。 無料 api では 1 秒間に 25 リクエストという制限があるので、無料 api を使う場合はコントラクト数を 25 以下にしないと、自分でコードを変更してグループで分けて検証しなければなりません。**
+**並行呼び出し - 速度を上げるために並行呼び出しを使用します。 無料 API では 1 秒間に 25 リクエストという制限があるので、無料 API を使う場合はコントラクト数を 25 以下にしないと、自分でコードを変更してグループで分けて検証しなければなりません。**
 
 ![model](./img/server.png)
 
@@ -116,7 +116,7 @@
 
 <br />
 
-> 3. client フォルダと server フォルダを作成し、それぞれのフォルダで git clone を実行してリポジトリからファイルをコピーし、npm のコマンドを実行します。 最後に、リバースプロキシサーバーを使って本番環境を配備します。 また、テスト用に直接 npm start を実行することも可能です。
+> 3. client フォルダと server フォルダを作成し、それぞれのフォルダで `git clone` を実行してリポジトリからファイルをコピーし、npm のコマンドを実行します。 最後に、リバースプロキシサーバーを使って本番環境を配備します。 また、テスト用に直接 `npm start` を実行することも可能です。
 
 <br />
 
@@ -130,7 +130,7 @@ npm install
 
 <br />
 
-.src/App.js の`verifyApiUrl`をバックエンドの Api Url に変更します。
+`.src/App.js`の`verifyApiUrl`をバックエンドの API Url に変更します。
 
 ```javascript
 const verifyApiUrl = "verify.0xmimiq.me";
@@ -154,7 +154,7 @@ npm install
 
 <br />
 
-`.src/_configs.json` の名前を `./src/configs.json`に変更します。そして、ファイル内のパラメータを使用しているものに変更します。
+`.src/_configs.json`の名前を`./src/configs.json`に変更します。そして、ファイル内のパラメータを使用しているものに変更します。
 
 ```json
 {
@@ -169,7 +169,7 @@ npm install
     "checkUserCycleTime": 1200000 // Check wallet cycle interval time in ms
   },
   "moralis": {
-    // Apply api key in https://moralis.io/
+    // Apply API key in https://moralis.io/
     "apiKey": "",
     "logLevel": "info",
     "formatEvmChainId": "decimal",
@@ -194,7 +194,7 @@ Nginx にファイルを配置する方法はこちらをご覧ください。
 > 認証ページと Discord での更新の表示
 
 - [**Static verify page**](https://0xmimiq.github.io/Discord-NFT-Verifier-Client/)
-- [Discord demo](./img/discordDemo.png)
+- [**Discord demo**](./img/discordDemo.png)
 
 <br />
 
